@@ -1,0 +1,49 @@
+export const ORDER_STATUSES = [
+  'PENDING',
+  'CONFIRMED',
+  'SHIPPED',
+  'OUT_FOR_DELIVERY',
+  'DELIVERED',
+  'CANCELLED',
+  'RETURNED',
+  'REFUNDED',
+];
+
+export const PRODUCT_STATUSES = ['ACTIVE', 'INACTIVE', 'OUT_OF_STOCK', 'DISCONTINUED'];
+
+export const PAYMENT_STATUSES = ['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED'];
+
+export const ROLES = ['ROLE_CUSTOMER', 'ROLE_SELLER', 'ROLE_ADMIN'];
+
+export const ORDER_STATUS_COLORS = {
+  PENDING: '#f59e0b',
+  CONFIRMED: '#0ea5e9',
+  SHIPPED: '#3b82f6',
+  OUT_FOR_DELIVERY: '#06b6d4',
+  DELIVERED: '#10b981',
+  CANCELLED: '#ef4444',
+  RETURNED: '#6b7280',
+  REFUNDED: '#111827',
+};
+
+export const PAYMENT_STATUS_COLORS = {
+  PENDING: '#f59e0b',
+  COMPLETED: '#10b981',
+  FAILED: '#ef4444',
+  REFUNDED: '#111827',
+};
+
+export const PRODUCT_STATUS_COLORS = {
+  ACTIVE: '#10b981',
+  INACTIVE: '#6b7280',
+  OUT_OF_STOCK: '#f59e0b',
+  DISCONTINUED: '#ef4444',
+};
+
+export const ROLE_COLORS = {
+  ROLE_ADMIN: '#dc2626',
+  ROLE_SELLER: '#0ea5e9',
+  ROLE_CUSTOMER: '#64748b',
+};
+
+export const LOW_STOCK_THRESHOLD = 5;
