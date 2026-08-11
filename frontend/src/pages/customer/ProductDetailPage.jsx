@@ -82,7 +82,7 @@ const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { product, loading: productLoading, error } = useSelector((state) => state.products);
   const { reviews, loading: reviewsLoading, totalPages: reviewPages, canReview: canReviewProduct } = useSelector(
     (state) => state.reviews
@@ -160,7 +160,6 @@ const ProductDetailPage = () => {
     );
   }
 
-  const stars = generateStars(product.rating || product.averageRating || 0);
   const discountedPrice = product.discountPrice || product.discountedPrice;
   const hasDiscount = discountedPrice && discountedPrice < product.price;
   const savingsPercent = hasDiscount ? getDiscountedPrice(product.price, discountedPrice) : 0;

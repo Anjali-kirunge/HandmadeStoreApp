@@ -19,7 +19,6 @@ const AdminCoupons = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [editingCoupon, setEditingCoupon] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [formData, setFormData] = useState({
     code: "",
@@ -34,7 +33,7 @@ const AdminCoupons = () => {
 
   useEffect(() => {
     dispatch(fetchCoupons());
-  }, [dispatch, currentPage]);
+  }, [dispatch]);
 
   const resetForm = () => {
     setFormData({

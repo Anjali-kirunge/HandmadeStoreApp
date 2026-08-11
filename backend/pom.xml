@@ -18,7 +18,7 @@
     <description>Handmade Store E-Commerce Backend</description>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>23</java.version>
         <jjwt.version>0.12.6</jjwt.version>
         <springdoc.version>2.7.0</springdoc.version>
     </properties>
@@ -157,6 +157,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>com.handmade.store.HandmadeStoreApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

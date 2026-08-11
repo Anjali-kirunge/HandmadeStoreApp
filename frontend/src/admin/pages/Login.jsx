@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, selectAuthLoading, selectAuthError } from '../../redux/slices/authSlice';
-import { getErrorMessage } from '../utils/helpers';
 import '../admin.css';
 import Logo from '../../components/common/Logo';
 

@@ -11,7 +11,6 @@ import { fetchCategories } from '../../redux/slices/categoriesSlice';
 const AddProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading } = useSelector((state) => state.products);
   const { categories } = useSelector((state) => state.categories);
 
   const mainImageRef = useRef(null);

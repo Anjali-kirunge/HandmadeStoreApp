@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Nav, Navbar } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 import { FiGrid, FiPackage, FiShoppingBag, FiDollarSign, FiMenu, FiX } from 'react-icons/fi';
 
 const navItems = [

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navbar as BSNavbar, Nav, Container, Form, FormControl, Dropdown } from 'react-bootstrap';
+import { Navbar as BSNavbar, Nav, Container, Form, Dropdown } from 'react-bootstrap';
 import {
   FiShoppingCart,
   FiHeart,
@@ -15,7 +15,6 @@ import {
   FiShield,
   FiPackage,
   FiLogOut,
-  FiHome,
   FiShoppingBag,
   FiUser,
   FiChevronDown,

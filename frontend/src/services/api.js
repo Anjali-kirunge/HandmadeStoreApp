@@ -78,7 +78,7 @@ api.interceptors.response.use(
           }
           config.headers.Authorization = `Bearer ${newToken}`;
           return api(config);
-        } catch (refreshErr) {
+        } catch (_refreshErr) {
           clearAuthState();
           redirectToLogin();
           return Promise.reject(error);

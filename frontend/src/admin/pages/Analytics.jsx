@@ -17,7 +17,7 @@ import { analyticsApi } from '../api';
 import PageHeader from '../components/PageHeader';
 import Loading from '../components/Loading';
 import EmptyState from '../components/EmptyState';
-import { formatPrice, formatDateTime, toLocalDateInput } from '../utils/helpers';
+import { formatPrice, formatDateTime } from '../utils/helpers';
 
 ChartJS.register(
   CategoryScale,

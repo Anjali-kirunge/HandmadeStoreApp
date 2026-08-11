@@ -6,7 +6,7 @@ import { FiStar, FiTrash2 } from "react-icons/fi";
 import Swal from "sweetalert2";
 import { fetchProducts, toggleFeatured, deleteProduct } from "../../redux/slices/productsSlice";
 import { fetchCategories } from "../../redux/slices/categoriesSlice";
-import { formatPrice, formatDate } from "../../utils/helpers";
+import { formatPrice } from "../../utils/helpers";
 import { PRODUCT_STATUSES } from "../../utils/constants";
 import Pagination from "../../components/common/Pagination";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
@@ -58,7 +58,7 @@ const AdminProducts = () => {
     setCurrentPage(1);
   };
 
-  const handleToggleFeatured = (productId, currentStatus) => {
+  const handleToggleFeatured = (productId) => {
     dispatch(toggleFeatured(productId));
   };
 

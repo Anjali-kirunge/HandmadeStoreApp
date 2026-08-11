@@ -14,21 +14,6 @@ jobs:
       run:
         working-directory: backend
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpass
-          POSTGRES_DB: handmade_store_test
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,10 +27,6 @@ jobs:
 
       - name: Run backend tests
         run: mvn clean test
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/handmade_store_test
-          SPRING_DATASOURCE_USERNAME: testuser
-          SPRING_DATASOURCE_PASSWORD: testpass
 
       - name: Build backend
         run: mvn package -DskipTests

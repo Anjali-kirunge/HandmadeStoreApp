@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Row, Col, Card, Button, Form, Table, Badge, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form, Table, InputGroup } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { FiCheck, FiCreditCard, FiTruck, FiPackage } from 'react-icons/fi';
 import { toast } from 'react-toastify';
-import { fetchCart, applyCoupon, resetCoupon } from '../../redux/slices/cartSlice';
+import { fetchCart, applyCoupon } from '../../redux/slices/cartSlice';
 import { placeOrder } from '../../redux/slices/ordersSlice';
 import { selectCurrentUser } from '../../redux/slices/authSlice';
 import { createRazorpayOrder, verifyRazorpayPayment } from '../../services/razorpayService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { formatPrice } from '../../utils/helpers';
-import { PAYMENT_METHODS } from '../../utils/constants';
 
 const steps = [
   { label: 'Shipping', icon: FiTruck },

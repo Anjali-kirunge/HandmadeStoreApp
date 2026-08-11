@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaBan, FaCheckCircle, FaEdit } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-import { userApi, orderApi } from '../api';
+import { userApi } from '../api';
 import PageHeader from '../components/PageHeader';
 import Loading from '../components/Loading';
 import EmptyState from '../components/EmptyState';
@@ -44,7 +44,6 @@ export default function UserDetail() {
   if (loading) return <Loading text="Loading user…" />;
   if (!user) return <EmptyState title="User not found" />;
 
-  const initials = `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`.toUpperCase() || 'U';
   const spent = (orders?.content || []).reduce((sum, o) => sum + Number(o.totalAmount || 0), 0);
 
   const saveRole = async () => {
