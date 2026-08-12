@@ -15,6 +15,17 @@ spring:
   h2:
     console:
       enabled: true
+  mail:
+    host: localhost
+    port: 3025
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
 
 jwt:
   secret: dGVzdC1zZWNyZXQta2V5LWZvci1oYW5kbWFkZS1zdG9yZS11bml0LXRlc3RzLW9ubHk=
