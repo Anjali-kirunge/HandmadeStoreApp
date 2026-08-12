@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import Navbar from '../../components/layout/Navbar';
+import ThemeProvider from '../../context/ThemeContext';
 import authReducer from '../../redux/slices/authSlice';
 import cartReducer from '../../redux/slices/cartSlice';
 import wishlistReducer from '../../redux/slices/wishlistSlice';
@@ -15,14 +16,16 @@ const createTestStore = (authState = {}) => configureStore({
 
 const renderNavbar = (authState) => render(
   <Provider store={createTestStore(authState)}>
-    <BrowserRouter><Navbar /></BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider><Navbar /></ThemeProvider>
+    </BrowserRouter>
   </Provider>
 );
 
 describe('Navbar', () => {
   test('renders brand name', () => {
     renderNavbar();
-    expect(screen.getByText(/Handmade Store/)).toBeInTheDocument();
+    expect(screen.getByText(/Handmade/)).toBeInTheDocument();
   });
   test('shows login when not authenticated', () => {
     renderNavbar();

@@ -11,7 +11,7 @@ import { formatPrice } from '../../utils/helpers';
 
 const CartPage = () => {
   const dispatch = useDispatch();
-  const { items, totalPrice, totalItems, coupon, discount, loading, error } = useSelector(
+  const { items, totalPrice, totalItems, coupon, discount, loading } = useSelector(
     (state) => state.cart
   );
   const [couponCode, setCouponCode] = useState('');
@@ -41,7 +41,7 @@ const CartPage = () => {
     }
     dispatch(applyCoupon({ code: couponCode.trim(), orderTotal: totalPrice }))
       .unwrap()
-      .then((res) => {
+      .then(() => {
         toast.success('Coupon applied successfully!');
         setCouponCode('');
       })

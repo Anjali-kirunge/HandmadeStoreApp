@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaPlus, FaEdit, FaTrash, FaBoxOpen, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
 import { fetchCategories } from '../../redux/slices/categoriesSlice';
 import { fetchFeaturedProducts, fetchProducts } from '../../redux/slices/productsSlice';
-import { productApi, categoryApi } from '../api';
+import { productApi } from '../api';
 import PageHeader from '../components/PageHeader';
 import Loading from '../components/Loading';
 import EmptyState from '../components/EmptyState';
@@ -21,7 +21,6 @@ const PAGE_SIZE = 10;
 export default function Products() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [keyword, setKeyword] = useState('');
   const [status, setStatus] = useState('');

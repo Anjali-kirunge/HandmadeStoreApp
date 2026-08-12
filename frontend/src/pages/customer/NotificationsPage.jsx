@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { fetchNotifications, markAsRead, markAllAsRead } from '../../redux/slices/notificationsSlice';
-import { FiBell, FiCheck, FiCheckCircle, FiCircle, FiInfo } from 'react-icons/fi';
+import { FiBell, FiCheckCircle, FiCircle, FiInfo } from 'react-icons/fi';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { formatDate } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';

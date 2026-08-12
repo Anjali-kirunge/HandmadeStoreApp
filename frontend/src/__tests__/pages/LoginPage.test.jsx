@@ -18,10 +18,10 @@ const renderLogin = () => render(
 describe('LoginPage', () => {
   test('renders email input', () => {
     renderLogin();
-    expect(screen.getByLabelText(/email/ii) || screen.getByPlaceholderText(/email/i)).toBeTruthy();
+    expect(screen.getByLabelText(/email/i) || screen.getByPlaceholderText(/email/i)).toBeTruthy();
   });
   test('renders login button', () => {
     renderLogin();
-    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Row, Col, Card, Form, Button, Spinner, ProgressBar } from 'react-bootstrap';
 import { FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
@@ -21,7 +21,6 @@ const getPasswordStrength = (password) => {
 };
 
 const ResetPasswordPage = () => {
-  const [searchParams] = useSearchParams();
   const location = useLocation();
   const emailFromState = location.state?.email || '';
 

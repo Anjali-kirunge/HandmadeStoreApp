@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Row, Col, Card, Button, Badge, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { FiPackage, FiEye } from 'react-icons/fi';
 import { fetchOrders } from '../../redux/slices/ordersSlice';
@@ -14,7 +14,7 @@ const statusFilters = ['ALL', 'PENDING', 'CONFIRMED', 'SHIPPED', 'OUT_FOR_DELIVE
 
 const OrderHistoryPage = () => {
   const dispatch = useDispatch();
-  const { orders, loading, totalPages, currentPage, totalElements } = useSelector(
+  const { orders, loading, totalPages, currentPage } = useSelector(
     (state) => state.orders
   );
   const [statusFilter, setStatusFilter] = useState('ALL');

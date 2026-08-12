@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -43,7 +43,7 @@ const SellerProducts = () => {
     else if (sortBy === 'name') params.sort = 'name,asc';
 
     dispatch(fetchSellerProducts(params));
-  }, [dispatch, page, statusFilter, sortBy]);
+  }, [dispatch, page, statusFilter, sortBy, search]);
 
   const handleSearch = (e) => {
     e.preventDefault();

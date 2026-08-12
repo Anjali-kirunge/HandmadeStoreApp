@@ -6,7 +6,6 @@ import {
   FiRefreshCw,
   FiShield,
   FiHeart,
-  FiGift,
 } from 'react-icons/fi';
 
 const heroSlides = [

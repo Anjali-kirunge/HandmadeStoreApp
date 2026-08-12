@@ -1,4 +1,4 @@
-import { Badge, Button, Image } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiHeart, FiShoppingCart, FiStar, FiArrowRight } from 'react-icons/fi';

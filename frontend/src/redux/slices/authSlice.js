@@ -63,7 +63,7 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { reject
     if (token) {
       try {
         await authService.logout(token);
-      } catch (ignored) {
+      } catch (_ignored) {
         // Server-side revocation is best-effort; local logout must still proceed.
       }
     }

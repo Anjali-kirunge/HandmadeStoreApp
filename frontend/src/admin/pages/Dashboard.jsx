@@ -20,7 +20,6 @@ import {
   FaBox,
   FaStore,
   FaArrowUp,
-  FaArrowDown,
 } from 'react-icons/fa';
 import { dashboardApi, analyticsApi } from '../api';
 import PageHeader from '../components/PageHeader';
