@@ -17,9 +17,9 @@ spring:
       enabled: true
 
 jwt:
-  secret: test-secret-key-for-unit-testing-only-32chars!!
+  secret: dGVzdC1zZWNyZXQta2V5LWZvci1oYW5kbWFkZS1zdG9yZS11bml0LXRlc3RzLW9ubHk=
   expiration: 86400000
-  refresh-expiration: 604800000
+  refreshExpiration: 604800000
 
 stripe:
   secret-key: sk_test_fake
