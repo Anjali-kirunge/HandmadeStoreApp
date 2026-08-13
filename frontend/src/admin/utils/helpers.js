@@ -8,9 +8,11 @@ export function formatPrice(amount) {
   return `₹${formatted}`;
 }
 
+const API_ORIGIN = (import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1').replace(/\/api\/v1$/, '');
+
 export function resolveImageUrl(url, fallback = '/uploads/placeholder.svg') {
   if (!url) return fallback;
-  if (url.startsWith('/uploads/')) return `http://localhost:8080${url}`;
+  if (url.startsWith('/uploads/')) return `${API_ORIGIN}${url}`;
   return url;
 }
 
