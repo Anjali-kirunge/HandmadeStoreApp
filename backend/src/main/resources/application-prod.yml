@@ -7,7 +7,7 @@ spring:
       mode: never
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
 app:
   cors:
