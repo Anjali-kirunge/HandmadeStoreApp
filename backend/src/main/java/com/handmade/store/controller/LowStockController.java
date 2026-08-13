@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/inventory")
-@CrossOrigin(origins = "http://localhost:5173")
 public class LowStockController {
 
     private final LowStockService lowStockService;

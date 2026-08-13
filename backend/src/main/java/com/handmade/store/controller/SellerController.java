@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/seller")
-@CrossOrigin(origins = "http://localhost:5173")
 @PreAuthorize("hasAnyRole('SELLER', 'ADMIN')")
 public class SellerController {
 

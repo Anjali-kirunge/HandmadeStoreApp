@@ -13,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/wishlist")
-@CrossOrigin(origins = "http://localhost:5173")
 public class WishlistController {
 
     private final WishlistService wishlistService;

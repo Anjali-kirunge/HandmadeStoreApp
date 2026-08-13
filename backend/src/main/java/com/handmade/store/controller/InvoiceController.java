@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/invoices")
-@CrossOrigin(origins = "http://localhost:5173")
 public class InvoiceController {
 
     private final OrderService orderService;

@@ -11,7 +11,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/coupons")
-@CrossOrigin(origins = "http://localhost:5173")
 public class CouponController {
 
     private final CouponService couponService;

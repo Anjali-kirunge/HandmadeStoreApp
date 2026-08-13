@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/v1/otp")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:3000"})
 public class OtpController {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");

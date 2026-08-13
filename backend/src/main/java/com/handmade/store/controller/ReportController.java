@@ -16,7 +16,6 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/admin/reports")
-@CrossOrigin(origins = "http://localhost:5173")
 @PreAuthorize("hasRole('ADMIN')")
 public class ReportController {
 
