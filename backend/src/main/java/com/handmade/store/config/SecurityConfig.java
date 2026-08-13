@@ -61,6 +61,7 @@ public class SecurityConfig {
                                 new Header("Referrer-Policy", "strict-origin-when-cross-origin"),
                                 new Header("X-Content-Type-Options", "nosniff")))))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/health").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/chat").permitAll()

@@ -6,6 +6,9 @@ spring:
     init:
       mode: never
   jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 50
     hibernate:
       ddl-auto: none
 
