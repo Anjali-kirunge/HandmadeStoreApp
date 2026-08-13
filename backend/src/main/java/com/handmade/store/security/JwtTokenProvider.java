@@ -23,7 +23,7 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
-    @Value("${jwt.refreshExpiration}")
+    @Value("${jwt.refresh.expiration}")
     private long jwtRefreshExpiration;
 
     public JwtTokenProvider(UserRepository userRepository) {
