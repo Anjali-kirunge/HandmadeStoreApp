@@ -99,9 +99,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryResponse> getAll() {
-        List<Category> rootCategories = categoryRepository.findByParentId(null);
-        return rootCategories.stream()
-                .map(this::mapToCategoryResponseWithChildren)
+        List<Category> all = categoryRepository.findAll();
+        Map<Long, List<Category>> childrenByParent = new HashMap<>();
+        for (Category category : all) {
+            if (category.getParent() != null && category.getParent().getId() != null) {
+                childrenByParent.computeIfAbsent(category.getParent().getId(), k -> new ArrayList<>()).add(category);
+            }
+        }
+        return all.stream()
+                .filter(category -> category.getParent() == null)
+                .map(category -> mapToCategoryResponseWithChildren(category, childrenByParent))
                 .collect(Collectors.toList());
     }
 
@@ -133,10 +140,12 @@ public class CategoryServiceImpl implements CategoryService {
                 .build();
     }
 
-    private CategoryResponse mapToCategoryResponseWithChildren(Category category) {
+    private CategoryResponse mapToCategoryResponseWithChildren(Category category,
+                                                               Map<Long, List<Category>> childrenByParent) {
         CategoryResponse response = mapToCategoryResponse(category);
-        List<CategoryResponse> children = category.getCategories().stream()
-                .map(this::mapToCategoryResponseWithChildren)
+        List<CategoryResponse> children = childrenByParent
+                .getOrDefault(category.getId(), new ArrayList<>()).stream()
+                .map(child -> mapToCategoryResponseWithChildren(child, childrenByParent))
                 .collect(Collectors.toList());
         response.setChildren(children);
         return response;

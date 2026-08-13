@@ -29,6 +29,7 @@ export default function Inventory() {
   const [data, setData] = useState(null);
   const [lowStock, setLowStock] = useState([]);
   const [keyword, setKeyword] = useState('');
+  const [debouncedKeyword, setDebouncedKeyword] = useState('');
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -46,7 +47,7 @@ export default function Inventory() {
 
   const load = useCallback(() => {
     setLoading(true);
-    const p = productApi.inventory(keyword || null, status || null, page, PAGE_SIZE);
+    const p = productApi.inventory(debouncedKeyword || null, status || null, page, PAGE_SIZE);
     const l = inventoryApi.lowStock();
     Promise.all([p, l])
       .then(([pRes, lRes]) => {
@@ -55,15 +56,20 @@ export default function Inventory() {
       })
       .catch((err) => toast.error(getErrorMessage(err)))
       .finally(() => setLoading(false));
-  }, [keyword, status, page]);
+  }, [debouncedKeyword, status, page]);
 
   useEffect(() => {
     load();
   }, [load]);
 
   useEffect(() => {
+    const timer = setTimeout(() => setDebouncedKeyword(keyword.trim()), 400);
+    return () => clearTimeout(timer);
+  }, [keyword]);
+
+  useEffect(() => {
     setPage(0);
-  }, [keyword, status]);
+  }, [debouncedKeyword, status]);
 
   useEffect(() => {
     localStorage.setItem(THRESHOLD_KEY, String(threshold));

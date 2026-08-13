@@ -119,8 +119,10 @@ const ShopPage = () => {
   }, [searchParams, currentPageNum]);
 
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+    if (categories.length === 0) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, categories.length]);
 
   useEffect(() => {
     dispatch(fetchProducts(buildParams()));

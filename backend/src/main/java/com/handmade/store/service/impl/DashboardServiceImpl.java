@@ -50,7 +50,7 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public AdminDashboardResponse getAdminDashboard() {
         long totalUsers = userRepository.count();
-        long totalSellers = userRepository.findByRole(Role.ROLE_SELLER).size();
+        long totalSellers = userRepository.countByRole(Role.ROLE_SELLER);
         long totalProducts = productRepository.count();
         long totalOrders = orderRepository.count();
 
@@ -95,11 +95,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .map(Product::getId)
                 .collect(Collectors.toSet());
 
-        List<Order> allOrders = orderRepository.findAll();
-        List<Order> sellerOrders = allOrders.stream()
-                .filter(order -> order.getItems().stream()
-                        .anyMatch(item -> sellerProductIds.contains(item.getProduct().getId())))
-                .toList();
+        List<Order> sellerOrders = orderRepository.findAllBySellerId(seller.getId());
 
         long totalOrders = sellerOrders.size();
 
@@ -122,7 +118,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .map(this::mapToOrderResponse)
                 .toList();
 
-        List<Double> monthlyEarnings = calculateMonthlyEarnings(sellerProductIds);
+        List<Double> monthlyEarnings = calculateMonthlyEarnings(seller.getId());
 
         List<ProductResponse> topProducts = sellerProducts.stream()
                 .sorted(Comparator.comparing(Product::getReviewCount).reversed())
@@ -149,47 +145,39 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private List<Double> calculateMonthlySales() {
+        LocalDateTime from = YearMonth.now().minusMonths(11).atDay(1).atStartOfDay();
+        Map<Integer, Double> totalsByMonth = new HashMap<>();
+        for (Object[] row : orderRepository.sumTotalAmountByMonth(from)) {
+            totalsByMonth.put(monthKey(((Number) row[0]).intValue(), ((Number) row[1]).intValue()),
+                    ((BigDecimal) row[2]).doubleValue());
+        }
+
         List<Double> monthlySales = new ArrayList<>();
         for (int i = 11; i >= 0; i--) {
             YearMonth month = YearMonth.now().minusMonths(i);
-            LocalDateTime startOfMonth = month.atDay(1).atStartOfDay();
-            LocalDateTime endOfMonth = month.atEndOfMonth().atTime(23, 59, 59);
-
-            List<Order> monthOrders = orderRepository.findAll().stream()
-                    .filter(o -> o.getCreatedAt() != null
-                            && o.getCreatedAt().isAfter(startOfMonth)
-                            && o.getCreatedAt().isBefore(endOfMonth))
-                    .toList();
-
-            double total = monthOrders.stream()
-                    .mapToDouble(o -> o.getTotalAmount().doubleValue())
-                    .sum();
-
-            monthlySales.add(total);
+            monthlySales.add(totalsByMonth.getOrDefault(monthKey(month.getYear(), month.getMonthValue()), 0.0));
         }
         return monthlySales;
     }
 
-    private List<Double> calculateMonthlyEarnings(Set<Long> sellerProductIds) {
+    private List<Double> calculateMonthlyEarnings(Long sellerId) {
+        LocalDateTime from = YearMonth.now().minusMonths(11).atDay(1).atStartOfDay();
+        Map<Integer, Double> totalsByMonth = new HashMap<>();
+        for (Object[] row : orderRepository.sumEarningsBySellerAndMonth(sellerId, from)) {
+            totalsByMonth.put(monthKey(((Number) row[0]).intValue(), ((Number) row[1]).intValue()),
+                    ((BigDecimal) row[2]).doubleValue());
+        }
+
         List<Double> monthlyEarnings = new ArrayList<>();
         for (int i = 11; i >= 0; i--) {
             YearMonth month = YearMonth.now().minusMonths(i);
-            LocalDateTime startOfMonth = month.atDay(1).atStartOfDay();
-            LocalDateTime endOfMonth = month.atEndOfMonth().atTime(23, 59, 59);
-
-            double total = orderRepository.findAll().stream()
-                    .filter(o -> o.getCreatedAt() != null
-                            && o.getCreatedAt().isAfter(startOfMonth)
-                            && o.getCreatedAt().isBefore(endOfMonth)
-                            && o.getOrderStatus() == OrderStatus.DELIVERED)
-                    .flatMap(o -> o.getItems().stream())
-                    .filter(item -> sellerProductIds.contains(item.getProduct().getId()))
-                    .mapToDouble(item -> item.getPrice().doubleValue())
-                    .sum();
-
-            monthlyEarnings.add(total);
+            monthlyEarnings.add(totalsByMonth.getOrDefault(monthKey(month.getYear(), month.getMonthValue()), 0.0));
         }
         return monthlyEarnings;
+    }
+
+    private int monthKey(int year, int month) {
+        return year * 100 + month;
     }
 
     private OrderResponse mapToOrderResponse(Order order) {

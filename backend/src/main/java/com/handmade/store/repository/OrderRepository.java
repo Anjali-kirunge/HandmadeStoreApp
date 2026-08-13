@@ -36,4 +36,22 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o JOIN o.items oi JOIN oi.product p WHERE p.seller.id = :sellerId")
     Page<Order> findBySellerId(@Param("sellerId") Long sellerId, Pageable pageable);
+
+    @Query("SELECT DISTINCT o FROM Order o JOIN o.items oi JOIN oi.product p WHERE p.seller.id = :sellerId")
+    List<Order> findAllBySellerId(@Param("sellerId") Long sellerId);
+
+    @Query("SELECT COUNT(oi.id) FROM Order o JOIN o.items oi " +
+            "WHERE o.user.id = :userId AND o.orderStatus = com.handmade.store.enums.OrderStatus.DELIVERED " +
+            "AND oi.product.id = :productId")
+    long countPurchasedAndDeliveredProduct(@Param("userId") Long userId, @Param("productId") Long productId);
+
+    @Query("SELECT YEAR(o.createdAt), MONTH(o.createdAt), COALESCE(SUM(o.totalAmount), 0) " +
+            "FROM Order o WHERE o.createdAt >= :from GROUP BY YEAR(o.createdAt), MONTH(o.createdAt)")
+    List<Object[]> sumTotalAmountByMonth(@Param("from") java.time.LocalDateTime from);
+
+    @Query("SELECT YEAR(o.createdAt), MONTH(o.createdAt), COALESCE(SUM(oi.price), 0) " +
+            "FROM Order o JOIN o.items oi JOIN oi.product p " +
+            "WHERE p.seller.id = :sellerId AND o.orderStatus = com.handmade.store.enums.OrderStatus.DELIVERED " +
+            "AND o.createdAt >= :from GROUP BY YEAR(o.createdAt), MONTH(o.createdAt)")
+    List<Object[]> sumEarningsBySellerAndMonth(@Param("sellerId") Long sellerId, @Param("from") java.time.LocalDateTime from);
 }

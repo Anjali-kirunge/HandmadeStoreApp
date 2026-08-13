@@ -50,7 +50,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -95,6 +97,8 @@ public class ReportServiceImpl implements ReportService {
                 .filter(o -> to == null || !o.getCreatedAt().toLocalDate().isAfter(to))
                 .collect(Collectors.toList());
 
+        Map<Long, String> transactionIds = loadTransactionIds(orders);
+
         String[] headers = {"Order ID", "Date", "Customer", "Email", "Phone", "Items",
                 "Item Details", "Subtotal", "Discount", "Shipping", "GST (18%)", "Total",
                 "Order Status", "Payment Status", "Payment Method", "Transaction ID",
@@ -121,7 +125,7 @@ public class ReportServiceImpl implements ReportService {
                     o.getOrderStatus() != null ? o.getOrderStatus().name() : "",
                     o.getPaymentStatus() != null ? o.getPaymentStatus().name() : "",
                     o.getPaymentMethod() != null ? o.getPaymentMethod().name() : "",
-                    resolveTransactionId(o.getId()),
+                    resolveTransactionId(o.getId(), transactionIds),
                     safe(o.getTrackingNumber()),
                     safe(o.getShippingAddress()));
         }).collect(Collectors.toList());
@@ -483,19 +487,52 @@ public class ReportServiceImpl implements ReportService {
                         .divide(new BigDecimal("118"), 2, RoundingMode.HALF_UP);
     }
 
+    private Map<Long, String> loadTransactionIds(List<AdminOrderResponse> orders) {
+        List<Long> orderIds = orders.stream()
+                .map(AdminOrderResponse::getId)
+                .filter(java.util.Objects::nonNull)
+                .collect(Collectors.toList());
+        if (orderIds.isEmpty()) {
+            return java.util.Collections.emptyMap();
+        }
+
+        Map<Long, String> stripeByOrder = paymentRepository.findAllByOrderIdIn(orderIds).stream()
+                .collect(Collectors.toMap(
+                        p -> p.getOrder().getId(),
+                        p -> p.getStripePaymentId(),
+                        (a, b) -> a != null && !a.isBlank() ? a : b));
+
+        Map<Long, String> razorpayByOrder = razorpayPaymentRepository.findAllByOrderIdIn(orderIds).stream()
+                .filter(p -> p.getRazorpayPaymentId() != null && !p.getRazorpayPaymentId().isBlank())
+                .collect(Collectors.toMap(
+                        p -> p.getOrder().getId(),
+                        RazorpayPayment::getRazorpayPaymentId,
+                        (a, b) -> a));
+
+        Map<Long, String> result = new HashMap<>();
+        for (Long orderId : orderIds) {
+            String stripeTxn = stripeByOrder.get(orderId);
+            if (stripeTxn != null && !stripeTxn.isBlank()) {
+                result.put(orderId, stripeTxn);
+            } else {
+                result.put(orderId, razorpayByOrder.getOrDefault(orderId, ""));
+            }
+        }
+        return result;
+    }
+
     private String resolveTransactionId(Long orderId) {
         if (orderId == null) {
             return "";
         }
-        String stripeTxn = paymentRepository.findByOrderId(orderId)
-                .map(Payment::getStripePaymentId)
-                .filter(txn -> txn != null && !txn.isBlank())
-                .orElse(null);
-        if (stripeTxn != null) {
-            return stripeTxn;
+        return resolveTransactionId(orderId, loadTransactionIds(
+                java.util.List.of(AdminOrderResponse.builder().id(orderId).build())));
+    }
+
+    private String resolveTransactionId(Long orderId, Map<Long, String> transactionIds) {
+        if (orderId == null) {
+            return "";
         }
-        return razorpayPaymentRepository.findByOrderId(orderId)
-                .map(RazorpayPayment::getRazorpayPaymentId)
-                .orElse("");
+        return transactionIds.getOrDefault(orderId, "");
     }
 }

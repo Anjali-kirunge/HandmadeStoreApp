@@ -6,11 +6,9 @@ import com.handmade.store.dto.product.ProductResponse;
 import com.handmade.store.dto.review.ReviewRequest;
 import com.handmade.store.dto.review.ReviewResponse;
 import com.handmade.store.dto.user.UserResponse;
-import com.handmade.store.entity.Order;
 import com.handmade.store.entity.Product;
 import com.handmade.store.entity.Review;
 import com.handmade.store.entity.User;
-import com.handmade.store.enums.OrderStatus;
 import com.handmade.store.exception.BadRequestException;
 import com.handmade.store.exception.ResourceNotFoundException;
 import com.handmade.store.repository.OrderRepository;
@@ -27,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -193,12 +190,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private boolean hasUserPurchasedAndDelivered(Long userId, Long productId) {
-        List<Order> orders = orderRepository.findByUserId(userId);
-        return orders.stream()
-                .filter(order -> order.getOrderStatus() == OrderStatus.DELIVERED)
-                .anyMatch(order ->
-                        order.getItems().stream().anyMatch(item ->
-                                item.getProduct().getId().equals(productId)));
+        return orderRepository.countPurchasedAndDeliveredProduct(userId, productId) > 0;
     }
 
     private void updateProductRating(Long productId) {
@@ -206,7 +198,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
 
         Double averageRating = reviewRepository.getAverageRatingByProductId(productId);
-        long reviewCount = reviewRepository.findByProductId(productId).size();
+        long reviewCount = reviewRepository.countByProductId(productId);
 
         product.setRating(averageRating != null
                 ? BigDecimal.valueOf(averageRating).setScale(2, RoundingMode.HALF_UP).doubleValue()

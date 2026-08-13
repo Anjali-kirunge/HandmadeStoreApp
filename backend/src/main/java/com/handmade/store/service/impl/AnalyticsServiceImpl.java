@@ -94,8 +94,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         BigDecimal totalRevenue = sumOrders(revenueOrders);
         long totalOrders = rangeOrders.size();
 
-        long totalCustomers = userRepository.findByRole(Role.ROLE_CUSTOMER).size();
-        long totalSellers = userRepository.findByRole(Role.ROLE_SELLER).size();
+        long totalCustomers = userRepository.countByRole(Role.ROLE_CUSTOMER);
+        long totalSellers = userRepository.countByRole(Role.ROLE_SELLER);
         long totalProducts = productRepository.count();
 
         AnalyticsSummary summary = AnalyticsSummary.builder()
@@ -251,6 +251,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     private List<TopProductResponse> buildTopProducts(List<Order> orders, int topN) {
         Map<Long, Long> quantitySold = new HashMap<>();
         Map<Long, BigDecimal> productRevenue = new HashMap<>();
+        Map<Long, Product> productMap = new HashMap<>();
 
         for (Order order : orders) {
             if (!isRevenueOrder(order)) {
@@ -261,6 +262,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 if (p == null) {
                     continue;
                 }
+                productMap.putIfAbsent(p.getId(), p);
                 quantitySold.merge(p.getId(), (long) item.getQuantity(), Long::sum);
                 BigDecimal amount = item.getPrice() != null ? item.getPrice() : BigDecimal.ZERO;
                 productRevenue.merge(p.getId(), amount, BigDecimal::add);
@@ -271,7 +273,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 .sorted(Map.Entry.<Long, Long>comparingByValue().reversed())
                 .limit(topN)
                 .map(entry -> {
-                    Product product = productRepository.findById(entry.getKey()).orElse(null);
+                    Product product = productMap.get(entry.getKey());
                     if (product == null) {
                         return null;
                     }

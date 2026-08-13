@@ -25,6 +25,7 @@ const SellerProducts = () => {
   const { products, loading, totalPages, currentPage } = useSelector((state) => state.seller);
 
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(0);
@@ -33,9 +34,14 @@ const SellerProducts = () => {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search.trim()), 400);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
     const params = { page, size: ITEMS_PER_PAGE };
     if (statusFilter) params.status = statusFilter;
-    if (search.trim()) params.search = search.trim();
+    if (debouncedSearch) params.search = debouncedSearch;
     if (sortBy === 'newest') params.sort = 'createdAt,desc';
     else if (sortBy === 'oldest') params.sort = 'createdAt,asc';
     else if (sortBy === 'price_low') params.sort = 'price,asc';
@@ -43,15 +49,12 @@ const SellerProducts = () => {
     else if (sortBy === 'name') params.sort = 'name,asc';
 
     dispatch(fetchSellerProducts(params));
-  }, [dispatch, page, statusFilter, sortBy, search]);
+  }, [dispatch, page, statusFilter, sortBy, debouncedSearch]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(0);
-    const params = { page: 0, size: ITEMS_PER_PAGE };
-    if (statusFilter) params.status = statusFilter;
-    if (search.trim()) params.search = search.trim();
-    dispatch(fetchSellerProducts(params));
+    setDebouncedSearch(search.trim());
   };
 
   const handleDeleteClick = (product) => {

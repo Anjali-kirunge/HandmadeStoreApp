@@ -35,9 +35,13 @@ const HomePage = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
 
   useEffect(() => {
-    dispatch(fetchFeaturedProducts());
-    dispatch(fetchCategories());
-  }, [dispatch]);
+    if (featuredProducts.length === 0) {
+      dispatch(fetchFeaturedProducts());
+    }
+    if (categories.length === 0) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, featuredProducts.length, categories.length]);
 
   const handleNewsletter = (e) => {
     e.preventDefault();
