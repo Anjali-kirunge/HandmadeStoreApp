@@ -4,6 +4,9 @@ const env = require('./env');
 
 function sslConfig() {
   if (process.env.DB_SSL !== 'true') return undefined;
+  if (process.env.DB_SSL_CA_PEM) {
+    return { ca: process.env.DB_SSL_CA_PEM };
+  }
   if (process.env.DB_CA_CERT) {
     return { ca: fs.readFileSync(process.env.DB_CA_CERT, 'utf8') };
   }
