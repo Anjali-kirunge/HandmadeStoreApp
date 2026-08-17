@@ -1,9 +1,7 @@
-# Handmade Store - Spring Boot API to Node.js API Mapping
+# Handmade Store - API Reference
 
-This document maps the existing Spring Boot backend REST contract (`/api/v1`) to the
-new Node.js/Express implementation. The new backend MUST expose identical methods,
-paths, query params, and JSON request/response shapes so the existing React/Vite
-frontend works without changes (only the API base URL changes).
+REST API contract (`/api/v1`) for the Node.js/Express backend.
+All endpoints return JSON responses compatible with the React/Vite frontend.
 
 Base URL: `/api/v1`
 Base URL on Render: `https://<new-node-backend>.onrender.com/api/v1`
@@ -16,7 +14,7 @@ Base URL on Render: `https://<new-node-backend>.onrender.com/api/v1`
 Most endpoints return the resource object directly (e.g. `OrderResponse`).
 Some endpoints return a simple map with `message` (and occasionally extra keys).
 
-### Error responses (Spring `GlobalExceptionHandler` -> replicate)
+### Error responses
 Error body shape (all error responses):
 ```json
 {
