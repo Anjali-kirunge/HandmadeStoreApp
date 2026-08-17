@@ -1,6 +1,0 @@
-target
-.env
-*.log
-.mvn
-mvnw
-mvnw.cmd

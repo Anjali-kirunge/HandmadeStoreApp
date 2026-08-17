@@ -39,16 +39,19 @@ const CheckoutPage = () => {
   const [couponCode, setCouponCode] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [shippingErrors, setShippingErrors] = useState({});
+  const [cartFetched, setCartFetched] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchCart());
+    dispatch(fetchCart())
+      .finally(() => setCartFetched(true))
+      .catch(() => {});
   }, [dispatch]);
 
   useEffect(() => {
-    if (items.length === 0 && !cartLoading) {
+    if (cartFetched && !cartLoading && items.length === 0) {
       navigate('/cart');
     }
-  }, [items, cartLoading, navigate]);
+  }, [cartFetched, items, cartLoading, navigate]);
 
   const validateShipping = () => {
     const errors = {};
@@ -186,7 +189,7 @@ const CheckoutPage = () => {
   const shippingCost = totalPrice > 999 ? 0 : 99;
   const grandTotal = totalPrice - (discount || 0) + shippingCost;
 
-  if (cartLoading) return <LoadingSpinner />;
+  if (cartLoading || !cartFetched) return <LoadingSpinner />;
 
   return (
     <>

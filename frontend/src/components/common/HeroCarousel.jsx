@@ -113,11 +113,10 @@ const HeroCarousel = () => {
                   ))}
                 </div>
               </Col>
-              <Col lg={5} className="d-none d-lg-block text-center position-relative">
+              <Col xs={12} lg={5} className="text-center position-relative mt-4 mt-lg-0">
                 <div
+                  className="hero-3d-wrap"
                   style={{
-                    position: 'relative',
-                    display: 'inline-block',
                     transform: 'perspective(1000px) rotateY(-15deg) rotateX(5deg)',
                     transition: 'transform 0.4s ease-in-out',
                   }}
@@ -131,14 +130,7 @@ const HeroCarousel = () => {
                   <img
                     src={slide.image}
                     alt={slide.imageAlt}
-                    style={{
-                      maxHeight: '340px',
-                      objectFit: 'cover',
-                      borderRadius: '24px',
-                      boxShadow:
-                        '-15px 25px 40px -10px rgba(0, 0, 0, 0.4), 0 10px 15px -5px rgba(0, 0, 0, 0.2)',
-                      border: '4px solid rgba(255, 255, 255, 0.1)',
-                    }}
+                    className="hero-feature-img"
                   />
                 </div>
               </Col>

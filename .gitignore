@@ -1,21 +1,23 @@
 # Secrets - never commit real credentials
 .env
-*.env
+.env.*
 !.env.example
-
-# Backend
-backend/target/
-backend/logs/
-backend/invoices/
-backend/uploads/
-backend/src/main/resources/application.yml
-secrets_to_share.txt
 
 # Frontend
 frontend/node_modules/
 frontend/dist/
-admin-app/node_modules/
-admin-app/dist/
+frontend/.vercel/
+frontend/vite-dev*.log
+
+# Node.js backend
+nodejs-backend/node_modules/
+nodejs-backend/uploads/*
+!nodejs-backend/uploads/.gitkeep
+nodejs-backend/*.log
+
+# Java backend (if any remnants)
+backend/target/
+backend/logs/
 
 # IDE / OS
 .idea/
@@ -24,3 +26,7 @@ admin-app/dist/
 .DS_Store
 Thumbs.db
 *.log
+
+# Debug / temp files
+smoke.js
+smoke2.js
